@@ -1,6 +1,8 @@
 # CCP Log Viewer
 
-![screenshot](https://github.com/tglovernuppy/ccp-log-viewer/raw/master/docs/screenshot.gif)
+Available at [https://mahayash315.github.io/ccp-log-viewer/](https://mahayash315.github.io/ccp-log-viewer/)
+
+![screenshot](https://github.com/mahayash315/ccp-log-viewer/raw/master/docs/screenshot.gif)
 
 ## Available Scripts
 
