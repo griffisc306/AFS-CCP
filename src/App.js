@@ -17,7 +17,7 @@ import LoadingView from './LoadingView'
 import SnapshotListView from './SnapshotListView'
 import LogView from './LogView'
 
-import CCP_LOG from './agent-log'
+// import CCP_LOG from './agent-log' // uncomment this for debugging
 
 const styles = {
   root: {
@@ -60,7 +60,7 @@ class App extends React.Component {
   }
   
   componentDidMount() {
-    // this._onLoadLog(CCP_LOG) // use this for debugging
+    // this._onLoadLog(CCP_LOG) // uncomment this for debugging
   }
   
   _onLoadLog(log) {
