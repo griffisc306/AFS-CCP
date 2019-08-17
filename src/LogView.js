@@ -12,6 +12,9 @@ import Select from '@material-ui/core/Select';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
+import Button from '@material-ui/core/Button';
+import UnfoldLess from '@material-ui/icons/UnfoldLess';
+import UnfoldMore from '@material-ui/icons/UnfoldMore';
 
 const styles = (theme) => ({
   root: {},
@@ -77,6 +80,13 @@ const styles = (theme) => ({
   levelFilter: {
     margin: theme.spacing(1),
     minWidth: 120,
+  },
+  expand: {
+    display: 'none',
+    minWidth: 16,
+    [theme.breakpoints.up('md')]: {
+      display: 'inherit',
+    },
   },
   content: {
     width: 'auto',
@@ -163,7 +173,7 @@ class LogView extends React.PureComponent {
   }
   
   render() {
-    const { classes, className: classNameProp, log, selected = [] } = this.props
+    const { classes, className: classNameProp, log, selected = [], isExpanded = false, expand } = this.props
     const { levelFilter, regexFilter } = this.state
     console.log(selected)
     
@@ -215,6 +225,10 @@ class LogView extends React.PureComponent {
                   <MenuItem value={"LOG"}>LOG</MenuItem>
                 </Select>
               </FormControl>
+              
+              { !isExpanded ?
+                <Button className={classes.expand} onClick={() => expand()}><UnfoldMore style={{transform: 'rotate(90deg)'}} /></Button> :
+                <Button className={classes.expand} onClick={() => expand()}><UnfoldLess style={{transform: 'rotate(90deg)'}} /></Button> }
             </div>
           </div>
           <div className={classes.content}>
@@ -254,6 +268,8 @@ LogView.propTypes = {
   className: PropTypes.string,
   log: PropTypes.array.isRequired,
   selected: PropTypes.array,
+  isExpanded: PropTypes.bool,
+  expand: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(LogView)

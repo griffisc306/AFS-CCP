@@ -1,7 +1,7 @@
 import React, { createRef } from 'react'
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import './App.css'
 
 import EmptyView from './EmptyView'
@@ -44,6 +45,7 @@ class App extends React.Component {
     this.selectLog = this.selectLog.bind(this)
     this.selectSnapshots = this.selectSnapshots.bind(this)
     this._handleOnDrop = this._handleOnDrop.bind(this)
+    this._handleExpandLogView = this._handleExpandLogView.bind(this)
     this._dropzoneRef = createRef()
     
     if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -57,6 +59,7 @@ class App extends React.Component {
     return {
       isInitial: true,
       isLoading: false,
+      isExpanded: false,
       log: [],
       selectedLog: [],
       selectedSnapshots: [],
@@ -93,8 +96,12 @@ class App extends React.Component {
     reader.readAsText(files[0])
   }
   
+  _handleExpandLogView() {
+    this.setState({ isExpanded: !this.state.isExpanded })
+  }
+  
   render() {
-    const { isInitial, isLoading, log, selectedLog, selectedSnapshots } = this.state
+    const { isInitial, isLoading, isExpanded, log, selectedLog, selectedSnapshots } = this.state
     const { classes } = this.props
     console.log(this.state)
     
@@ -123,15 +130,19 @@ class App extends React.Component {
                   (isLoading) ? <LoadingView /> :
                   <Container className={classes.content}>
                     <Grid container spacing={2}>
-                      <Grid item xs={12} md={3}>
-                        <SnapshotListView log={log} className={classes.sidebar}
+                      <Grid item xs={12} md={3} style={isExpanded ? {display: 'none'} : {}}>
+                        <SnapshotListView
+                          className={classes.sidebar}
+                          log={log}
                           selected={selectedSnapshots} 
                           selectLog={this.selectLog} 
                           selectSnapshots={this.selectSnapshots} />
                       </Grid>
-                      <Grid item xs={12} md={9}>
+                      <Grid item xs={12} md={9} style={isExpanded ? {maxWidth: '100%'} : {}}>
                         <LogView log={log} 
-                          selected={selectedLog} />
+                          selected={selectedLog}
+                          isExpanded={isExpanded}
+                          expand={this._handleExpandLogView} />
                       </Grid>
                     </Grid>
                   </Container>
