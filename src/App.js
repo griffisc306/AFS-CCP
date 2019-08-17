@@ -31,10 +31,10 @@ const styles = (theme) => ({
   dropping: {
     background: 'rgba(255,0,0,0.5)',
   },
-  // sidebar: {
-  //   position: 'sticky',
-  //   top: theme.spacing(2),
-  // },
+  sidebar: {
+    position: 'sticky',
+    top: theme.spacing(2),
+  },
 })
 
 class App extends React.Component {

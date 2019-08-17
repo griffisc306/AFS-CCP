@@ -37,9 +37,12 @@ const styles = (theme) => ({
   },
   list: {
     width: '100%',
+    height: '100%',
     backgroundColor: theme.palette.background.paper,
     position: 'relative',
     overflow: 'auto',
+    padding: 0,
+    maxHeight: window.innerHeight - theme.spacing(10),
   },
   listSection: {
     backgroundColor: 'inherit',
@@ -50,6 +53,7 @@ const styles = (theme) => ({
   },
   item: {
     padding: theme.spacing(0.5, 2),
+    display: 'block',
   },
   selected: {
     background: 'rgba(255,255,0,0.3)',
@@ -120,7 +124,7 @@ class SnapshotListView extends React.PureComponent {
     
     return (
       <div className="SnapshotListView" className={clsx(classes.root, classNameProp)}>
-        <Paper>
+        <Paper style={{ height: '100%' }}>
           <div className={classes.header}>
             <div className={classes.headerInside}>
               <Typography className={classes.title} variant="h6" component="h3">
