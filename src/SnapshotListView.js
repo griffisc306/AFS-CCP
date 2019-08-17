@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx';
+import { scroller } from 'react-scroll';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -72,6 +73,13 @@ class SnapshotListView extends React.PureComponent {
     console.log(snapshot)
     this.props.selectLog(snapshot._targetEventKeys)
     this.props.selectSnapshots([snapshot._key])
+    
+    const anchor = `L${snapshot._targetEventKeys[0]}`
+    scroller.scrollTo(anchor, {
+      duration: 800,
+      delay: 0,
+      smooth: 'easeInOutQuart',
+    })
   }
   
   render() {

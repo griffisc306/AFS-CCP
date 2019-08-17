@@ -225,7 +225,7 @@ class LogView extends React.PureComponent {
                   return null // ignore this line
                 } else {
                   return (
-                    <div key={event._key} className={clsx(classes.row, {
+                    <div id={`L${event._key}`} key={event._key} className={clsx(classes.row, {
                       [classes.rowSelected]: selected.includes(event._key),
                       [classes.rowError]: event.level === 'ERROR',
                       [classes.rowWarn]: event.level === 'WARN',
