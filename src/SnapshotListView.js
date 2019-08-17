@@ -83,7 +83,7 @@ class SnapshotListView extends React.PureComponent {
   }
   
   render() {
-    const { classes, log, selected = [] } = this.props
+    const { classes, className: classNameProp, log, selected = [] } = this.props
     console.log(selected)
     
     const snapshots = log
@@ -119,8 +119,8 @@ class SnapshotListView extends React.PureComponent {
     console.log(snapshotsByDate)
     
     return (
-      <div className="SnapshotListView">
-        <Paper className={classes.root}>
+      <div className="SnapshotListView" className={clsx(classes.root, classNameProp)}>
+        <Paper>
           <div className={classes.header}>
             <div className={classes.headerInside}>
               <Typography className={classes.title} variant="h6" component="h3">
@@ -156,6 +156,7 @@ class SnapshotListView extends React.PureComponent {
 
 SnapshotListView.propTypes = {
   classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
   log: PropTypes.array.isRequired,
   selected: PropTypes.array,
   selectLog: PropTypes.func.isRequired,

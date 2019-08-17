@@ -19,19 +19,23 @@ import LogView from './LogView'
 
 // import CCP_LOG from './agent-log' // uncomment this for debugging
 
-const styles = {
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
   },
   content: {
     zIndex: 2,
-    paddingTop: 16,
-    paddingBottom: 16,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
   dropping: {
     background: 'rgba(255,0,0,0.5)',
   },
-}
+  // sidebar: {
+  //   position: 'sticky',
+  //   top: theme.spacing(2),
+  // },
+})
 
 class App extends React.Component {
   constructor(props) {
@@ -120,7 +124,7 @@ class App extends React.Component {
                   <Container className={classes.content}>
                     <Grid container spacing={2}>
                       <Grid item xs={12} md={3}>
-                        <SnapshotListView log={log} 
+                        <SnapshotListView log={log} className={classes.sidebar}
                           selected={selectedSnapshots} 
                           selectLog={this.selectLog} 
                           selectSnapshots={this.selectSnapshots} />
