@@ -142,7 +142,7 @@ class App extends React.Component {
                           selectLog={this.selectLog} 
                           selectSnapshots={this.selectSnapshots} />
                       </Grid>
-                      <Grid item xs={12} md={9} style={isExpanded ? {maxWidth: '100%'} : {}}>
+                      <Grid item xs={12} md={9} style={isExpanded ? {minWidth: '100%', maxWidth: '100%'} : {}}>
                         <LogView log={log} 
                           selected={selectedLog}
                           isExpanded={isExpanded}
