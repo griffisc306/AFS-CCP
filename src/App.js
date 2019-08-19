@@ -60,6 +60,7 @@ class App extends React.Component {
       isInitial: true,
       isLoading: false,
       isExpanded: false,
+      filename: null,
       log: [],
       selectedLog: [],
       selectedSnapshots: [],
@@ -92,7 +93,7 @@ class App extends React.Component {
     reader.onload = (e) => { this._onLoadLog(JSON.parse(e.target.result)) }
     reader.onloadend = () => { this.setState({ isLoading: false }) }
     
-    this.setState({ isLoading: true })
+    this.setState({ isLoading: true, filename: files[0].name })
     reader.readAsText(files[0])
   }
   
@@ -101,7 +102,7 @@ class App extends React.Component {
   }
   
   render() {
-    const { isInitial, isLoading, isExpanded, log, selectedLog, selectedSnapshots } = this.state
+    const { isInitial, isLoading, isExpanded, filename, log, selectedLog, selectedSnapshots } = this.state
     const { classes } = this.props
     console.log(this.state)
     
@@ -119,6 +120,9 @@ class App extends React.Component {
                   <Toolbar variant="dense">
                     <Typography variant="h6" color="inherit">
                       CCP Log Viewer
+                    </Typography>
+                    <Typography variant="h6" color="inherit">
+                      { filename && (<span>&nbsp;:&nbsp;{filename}</span>) }
                     </Typography>
                   </Toolbar>
                 </AppBar>
