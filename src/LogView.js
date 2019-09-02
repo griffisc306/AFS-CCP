@@ -22,7 +22,8 @@ const styles = (theme) => ({
     marginRight: theme.spacing(2),
   },
   header: {
-    position: 'static',
+    position: 'sticky',
+    top: 0,
     width: '100%',
     display: 'flex',
     zIndex: 1100,

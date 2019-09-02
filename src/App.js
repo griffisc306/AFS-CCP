@@ -32,10 +32,6 @@ const styles = (theme) => ({
   dropping: {
     background: 'rgba(255,0,0,0.5)',
   },
-  sidebar: {
-    position: 'sticky',
-    top: theme.spacing(2),
-  },
 })
 
 class App extends React.Component {
@@ -136,7 +132,6 @@ class App extends React.Component {
                     <Grid container spacing={2}>
                       <Grid item xs={12} md={3} style={isExpanded ? {display: 'none'} : {}}>
                         <SnapshotListView
-                          className={classes.sidebar}
                           log={log}
                           selected={selectedSnapshots} 
                           selectLog={this.selectLog} 

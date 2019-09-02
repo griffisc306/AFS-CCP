@@ -11,7 +11,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 
 const styles = (theme) => ({
-  root: {},
+  root: {
+    position: 'sticky',
+    top: theme.spacing(2),
+  },
   header: {
     position: 'static',
     width: '100%',
