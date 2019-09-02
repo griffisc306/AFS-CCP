@@ -105,38 +105,78 @@ const styles = (theme) => ({
     width: 'max-content',
   },
   row: {
-    padding: theme.spacing(0, 2),
+    display: 'flex',
+    flexDirection: 'column',
     width: '100%',
+  },
+  line: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: theme.spacing(0, 2, 0, 1),
     '&:hover': {
       background: 'rgba(0,0,0,0.1)',
+    },
+    '&$error': {
+      color: 'red',
+      fontWeight: 'bold',
+    },
+    '&$warn': {
+      color: '#ca9106',
+      fontWeight: 'bold',
+    },
+    '&$info': {
+      color: '#005eda',
+    },
+    '&$trace': {
+      color: '#616161',
+    },
+    '&$debug': {
+      color: 'inherit',
+    },
+    '&$log': {
+      color: '#616161',
+    },
+    '&$selected': {
+      background: 'rgba(255,255,0,0.3)',
+    },
+  },
+  moreInfoToggle: {
+    width: theme.spacing(2),
+    textAlign: 'center',
+    '&$notExists': {},
+    '&$exists': {
+      '&$open': {
+        '&::after': {
+          content: `"-"`,
+        }
+      },
+      '&$closed': {
+        '&::after': {
+          content: `"+"`,
+        }
+      }
     }
   },
-  rowError: {
-    color: 'red',
-    fontWeight: 'bold',
-  },
-  rowWarn: {
-    color: '#ca9106',
-    fontWeight: 'bold',
-  },
-  rowInfo: {
-    color: '#005eda',
-  },
-  rowTrace: {
-    color: '#616161',
-  },
-  rowDebug: {
-    color: 'inherit',
-  },
-  rowLog: {
-    color: '#616161',
-  },
-  rowSelected: {
-    background: 'rgba(255,255,0,0.3)',
-  },
+  component: {},
   timestamp: {},
   level: {},
   text: {},
+  moreInfo: {
+    '&$closed': {
+    display: 'none',
+    }
+  },
+  error: {},
+  warn: {},
+  info: {},
+  trace: {},
+  debug: {},
+  log: {},
+  selected: {},
+  exists: {},
+  notExists: {},
+  open: {},
+  closed: {},
 })
 
 const LogLevel = {
@@ -160,6 +200,7 @@ class LogView extends React.PureComponent {
     return {
       levelFilter: 'LOG',
       regexFilter: '',
+      moreInfoOpen: [],
     }
   }
   
@@ -173,10 +214,22 @@ class LogView extends React.PureComponent {
     this.setState({ regexFilter: event.target.value })
   }
   
+  _toggleMoreInfo(key) {
+    const moreInfoOpen = this.state.moreInfoOpen.slice()
+    let idx = moreInfoOpen.indexOf(key)
+    
+    if (idx < 0) {
+      moreInfoOpen.push(key)
+    } else {
+      moreInfoOpen.splice(idx, 1)
+    }
+    
+    this.setState({ moreInfoOpen })
+  }
+  
   render() {
     const { classes, className: classNameProp, log, selected = [], isExpanded = false, expand } = this.props
-    const { levelFilter, regexFilter } = this.state
-    console.log(selected)
+    const { levelFilter, regexFilter, moreInfoOpen } = this.state
     
     let re = null, regexError = null
     try {
@@ -235,23 +288,47 @@ class LogView extends React.PureComponent {
           <div className={classes.content}>
             <div className={classes.rows}>
               {log.map((event) => {
+                let hasMoreInfo = event.exception || event.objects.length > 0
+                
                 if (LogLevel[event.level].value < LogLevel[levelFilter].value
                     || (re && !re.exec(`${event.time} ${event.level} ${event.text}`))) {
                   return null // ignore this line
                 } else {
                   return (
-                    <div id={`L${event._key}`} key={event._key} className={clsx(classes.row, {
-                      [classes.rowSelected]: selected.includes(event._key),
-                      [classes.rowError]: event.level === 'ERROR',
-                      [classes.rowWarn]: event.level === 'WARN',
-                      [classes.rowInfo]: event.level === 'INFO',
-                      [classes.rowTrace]: event.level === 'TRACE',
-                      [classes.rowDebug]: event.level === 'DEBUG',
-                      [classes.rowLog]: event.level === 'LOG',
-                    })}>
-                      <span className={classes.timestamp}>{event.time}</span>&nbsp;
-                      <span className={classes.level}>{event.level}</span>&nbsp;
-                      <span className={classes.text}>{event.text}</span>
+                    <div id={`L${event._key}`} key={event._key} className={classes.row}>
+                      
+                      <div className={clsx(classes.line, {
+                        [classes.selected]: selected.includes(event._key),
+                        [classes.wrror]: event.level === 'ERROR',
+                        [classes.warn]: event.level === 'WARN',
+                        [classes.info]: event.level === 'INFO',
+                        [classes.trace]: event.level === 'TRACE',
+                        [classes.debug]: event.level === 'DEBUG',
+                        [classes.log]: event.level === 'LOG',
+                      })}>
+                        <div className={clsx(classes.moreInfoToggle, {
+                          [classes.exists]: hasMoreInfo,
+                          [classes.notExists]: !hasMoreInfo,
+                          [classes.open]: moreInfoOpen.includes(event._key),
+                          [classes.closed]: !moreInfoOpen.includes(event._key),
+                        })} onClick={() => hasMoreInfo && this._toggleMoreInfo(event._key)}>
+                        </div>
+                        <div style={{ display: 'inline' }}>
+                          <span className={classes.timestamp}>{event.time}</span>&nbsp;
+                          <span className={classes.component}>{event.component}</span>&nbsp;
+                          <span className={classes.level}>{event.level}</span>&nbsp;
+                          <span className={classes.text}>{event.text}</span>
+                        </div>
+                      </div>
+                      
+                      { hasMoreInfo &&
+                        <div className={clsx(classes.moreInfo, {
+                          [classes.closed]: !moreInfoOpen.includes(event._key)
+                        })}>
+                          <pre>{JSON.stringify(event, null, 4)}</pre>
+                        </div>
+                      }
+                      
                     </div>
                   )
                 }
