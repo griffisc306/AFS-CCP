@@ -15,6 +15,7 @@ import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import UnfoldLess from '@material-ui/icons/UnfoldLess';
 import UnfoldMore from '@material-ui/icons/UnfoldMore';
+import ReactJson from 'react-json-view';
 
 const styles = (theme) => ({
   root: {},
@@ -164,12 +165,12 @@ const styles = (theme) => ({
   moreInfo: {
     background: '#f5f5f588',
     boxShadow: 'inset 0px 10px 16px -10px #0000001a, inset 0px -10px 16px -10px #0000001a',
+    padding: theme.spacing(2, 1),
+    fontSize: 14,
+    zoom: 0.9,
     '&$closed': {
       display: 'none',
-    }
-  },
-  moreInfoPre: {
-    margin: theme.spacing(2, 1),
+    },
   },
   error: {},
   warn: {},
@@ -330,7 +331,7 @@ class LogView extends React.PureComponent {
                         <div className={clsx(classes.moreInfo, {
                           [classes.closed]: !moreInfoOpen.includes(event._key)
                         })}>
-                          <pre className={classes.moreInfoPre}>{JSON.stringify(event, null, 4)}</pre>
+                          <ReactJson src={event} name={false} displayObjectSize={false} displayDataTypes={false} />
                         </div>
                       }
                       
