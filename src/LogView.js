@@ -211,7 +211,7 @@ class LogView extends React.PureComponent {
             <div className={classes.rows}>
               { log.map((event) => {
                 if (LogLevel[event.level].value < LogLevel[levelFilter].value
-                    || (re && !re.exec(`${event.time} ${event.level} ${event.text}`))) {
+                    || (re && !re.exec(`${event.time} ${event.component} ${event.level} ${event.text}`))) {
                   return null // ignore this line
                 } else {
                   return (
