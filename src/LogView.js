@@ -162,9 +162,14 @@ const styles = (theme) => ({
   level: {},
   text: {},
   moreInfo: {
+    background: '#f5f5f588',
+    boxShadow: 'inset 0px 10px 16px -10px #0000001a, inset 0px -10px 16px -10px #0000001a',
     '&$closed': {
-    display: 'none',
+      display: 'none',
     }
+  },
+  moreInfoPre: {
+    margin: theme.spacing(2, 1),
   },
   error: {},
   warn: {},
@@ -325,7 +330,7 @@ class LogView extends React.PureComponent {
                         <div className={clsx(classes.moreInfo, {
                           [classes.closed]: !moreInfoOpen.includes(event._key)
                         })}>
-                          <pre>{JSON.stringify(event, null, 4)}</pre>
+                          <pre className={classes.moreInfoPre}>{JSON.stringify(event, null, 4)}</pre>
                         </div>
                       }
                       
