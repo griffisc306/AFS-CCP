@@ -90,7 +90,7 @@ class LogLineView extends React.PureComponent {
     }
   }
   
-  _toggleMoreInfo(key) {
+  _toggleMoreInfo() {
     this.setState({ isMoreInfoOpen: !this.state.isMoreInfoOpen })
   }
   
