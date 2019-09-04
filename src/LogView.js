@@ -104,6 +104,7 @@ const styles = (theme) => ({
   },
   rows: {
     width: 'max-content',
+    minWidth: '100%',
   },
   row: {
     display: 'flex',
