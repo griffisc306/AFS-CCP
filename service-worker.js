@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/ccp-log-viewer/precache-manifest.f83aa95b6b30a9e23342ddb95fde4974.js"
+  "/ccp-log-viewer/precache-manifest.caf7516b672c80b952a24bd360faef60.js"
 );
 
 self.addEventListener('message', (event) => {
