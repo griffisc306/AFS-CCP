@@ -23,14 +23,15 @@ import LogView from './LogView'
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
+    backgroundColor: "#f5f5f5",
+  },
+  appbar: {
+    backgroundColor: "#26303b",
   },
   content: {
     zIndex: 2,
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-  },
-  dropping: {
-    background: 'rgba(255,0,0,0.5)',
   },
 })
 
@@ -112,7 +113,7 @@ class App extends React.Component {
           accept="text/plain">
             {({getRootProps, isDragActive}) => (
               <div {...getRootProps()}>
-                <AppBar position="static">
+                <AppBar position="static" className={classes.appbar}>
                   <Toolbar variant="dense">
                     <Typography variant="h6" color="inherit">
                       CCP Log Viewer
