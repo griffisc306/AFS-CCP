@@ -40,17 +40,24 @@ const styles = (theme) => ({
   moreInfoToggle: {
     width: theme.spacing(2),
     textAlign: 'center',
-    '&$notExists': {},
-    '&$exists': {
-      '&$open': {
-        '&::after': {
-          content: `"-"`,
-        }
-      },
+    '&:hover': {
       '&$closed': {
         '&::after': {
           content: `"+"`,
         }
+      }
+    },
+    '&$notExists': {},
+    '&$exists': {
+      '&$closed': {
+        '&::after': {
+          content: `"+"`,
+        }
+      }
+    },
+    '&$open': {
+      '&::after': {
+        content: `"-"`,
       }
     }
   },
@@ -117,7 +124,7 @@ class LogLineView extends React.PureComponent {
             [classes.notExists]: !hasMoreInfo,
             [classes.open]: isMoreInfoOpen,
             [classes.closed]: !isMoreInfoOpen,
-          })} onClick={() => hasMoreInfo && this._toggleMoreInfo()}>
+          })} onClick={() => this._toggleMoreInfo()}>
           </div>
           <div style={{ display: 'inline' }}>
             <span className={classes.timestamp}>{event.time}</span>&nbsp;
@@ -127,7 +134,7 @@ class LogLineView extends React.PureComponent {
           </div>
         </div>
         
-        { hasMoreInfo && isMoreInfoOpen &&
+        { isMoreInfoOpen &&
           <div className={clsx(classes.moreInfo)}>
             <ReactJson src={event} name={false} displayObjectSize={false} displayDataTypes={false} />
           </div>
