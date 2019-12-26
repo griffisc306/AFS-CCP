@@ -112,7 +112,7 @@ class LogLineView extends React.PureComponent {
         
         <div className={clsx(classes.line, {
           [classes.selected]: isSelected,
-          [classes.wrror]: event.level === 'ERROR',
+          [classes.error]: event.level === 'ERROR',
           [classes.warn]: event.level === 'WARN',
           [classes.info]: event.level === 'INFO',
           [classes.trace]: event.level === 'TRACE',
