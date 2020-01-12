@@ -45,7 +45,7 @@ const styles = (theme) => ({
     position: 'relative',
     overflow: 'auto',
     padding: 0,
-    maxHeight: window.innerHeight - theme.spacing(10),
+    maxHeight: `calc(100vh - ${theme.spacing(10)}px)`,
   },
   listSection: {
     backgroundColor: 'inherit',

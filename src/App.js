@@ -17,6 +17,7 @@ import DraggingView from './DraggingView'
 import LoadingView from './LoadingView'
 import SnapshotListView from './SnapshotListView'
 import LogView from './LogView'
+import MetricsView from './MetricsView'
 
 // import CCP_LOG from './agent-log' // uncomment this for debugging
 
@@ -130,6 +131,11 @@ class App extends React.Component {
                   (isInitial && !isLoading) ? <EmptyView /> :
                   (isLoading) ? <LoadingView /> :
                   <Container className={classes.content}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <MetricsView log={log} />
+                      </Grid>
+                    </Grid>
                     <Grid container spacing={2}>
                       <Grid item xs={12} md={3} style={isExpanded ? {display: 'none'} : {}}>
                         <SnapshotListView
