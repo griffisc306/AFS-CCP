@@ -159,7 +159,7 @@ class MetricsView extends React.PureComponent {
             <p className="state">{payload[0].payload.state.name}</p>
             <p className="label">
               skew : {payload[0].payload.skew} ms
-              { skewTooLarge && <span className="alert">&nbsp;(Too large!)</span> }
+              { skewTooLarge && <span className="alert">&nbsp;⚠️</span> }
             </p>
           </div>
       )
