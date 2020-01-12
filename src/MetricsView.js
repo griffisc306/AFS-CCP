@@ -95,7 +95,7 @@ const colorMap = {
   "FailedConnectCustomer": "#ff8488",
   "CallingCustomer": "#fff8a2",
   "MissedCallAgent": "#bbbbff",
-  "__custom": "#ffffff",
+  "__other": "#ffffff",
 }
 
 class MetricsView extends React.PureComponent {
@@ -179,7 +179,7 @@ class MetricsView extends React.PureComponent {
               onMouseLeave={() => this.handleLegendMouseLeave(name)}
               style={{ opacity: referenceAreaOpacities[name] }}>
               <a className="colorBox" style={{ backgroundColor: colorMap[name]}} />
-              { (name === '__custom') ? "Custom State" : name }
+              { (name === '__other') ? "Other" : name }
             </li>
         ))}
       </ul>
@@ -275,8 +275,8 @@ class MetricsView extends React.PureComponent {
                     const s0 = s[0]
                     const s1 = (i < arr.length - 1) ? arr[i+1][0] : s[s.length - 1]
                     const stateHits = Object.keys(colorMap).filter(name => s0.state.name.includes(name))
-                    const color = (stateHits.length > 0) ? colorMap[stateHits[0]] : colorMap['__custom']
-                    const opacity = (stateHits.length > 0) ? referenceAreaOpacities[stateHits[0]] : referenceAreaOpacities['__custom']
+                    const color = (stateHits.length > 0) ? colorMap[stateHits[0]] : colorMap['__other']
+                    const opacity = (stateHits.length > 0) ? referenceAreaOpacities[stateHits[0]] : referenceAreaOpacities['__other']
                     return (
                       <ReferenceArea
                         key={s0._key}
