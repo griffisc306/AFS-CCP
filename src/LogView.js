@@ -210,10 +210,15 @@ class LogView extends React.PureComponent {
           <div className={classes.content}>
             <div className={classes.rows}>
               { log.map((event) => {
-                if (LogLevel[event.level].value < LogLevel[levelFilter].value
-                    || (re && !re.exec(`${event.time} ${event.component} ${event.level} ${event.text}`))) {
-                  return null // ignore this line
-                } else {
+                if (LogLevel[event.level].value >= LogLevel[levelFilter].value
+                    && (re ?
+                          // test against the one-line log expression
+                          (re.exec(`${event.time} ${event.component} ${event.level} ${event.text}`)
+                          // test against stringified event.exception if exists
+                          || (event.exception && re.exec(`${JSON.stringify(event.exception)}`))
+                          // test against stringified event.objects if exists
+                          || (event.objects && event.objects.length && re.exec(`${JSON.stringify(event.objects)}`)))
+                        : true)) {
                   return (
                     <LogLineView 
                       id={`L${event._key}`} 
@@ -222,6 +227,8 @@ class LogView extends React.PureComponent {
                       event={event}
                       isSelected={selected.includes(event._key)} />
                   )
+                } else {
+                  return null // ignore this line
                 }
               }) }
             </div>
