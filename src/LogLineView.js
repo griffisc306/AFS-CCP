@@ -4,6 +4,9 @@ import clsx from 'clsx';
 import { fade, withStyles } from '@material-ui/core/styles';
 import ReactJson from 'react-json-view';
 
+import Messages from './utils/Messages';
+import CauseView from './CauseView';
+
 const styles = (theme) => ({
   root: {},
   line: {
@@ -91,16 +94,29 @@ class LogLineView extends React.PureComponent {
     this.state = this._getInitialState()
   }
   
+  componentDidMount() {
+    const {event} = this.props;
+    let i = Messages.length;
+    while (i--) {
+      if (event.text.indexOf(Messages[i].message) !== -1) {
+        this.setState({ isMessageContained: true, cause: Messages[i].cause });
+        break;
+      }
+    }
+  }
+
   _getInitialState() {
     return {
       isMoreInfoOpen: false,
+      isMessageContained: false,
+      cause: ""
     }
   }
-  
+
   _toggleMoreInfo() {
     this.setState({ isMoreInfoOpen: !this.state.isMoreInfoOpen })
   }
-  
+
   render() {
     const { classes, className: classNameProp, event, isSelected = false, ...props } = this.props
     const { isMoreInfoOpen } = this.state
@@ -130,7 +146,7 @@ class LogLineView extends React.PureComponent {
             <span className={classes.timestamp}>{event.time}</span>&nbsp;
             <span className={classes.component}>{event.component}</span>&nbsp;
             <span className={classes.level}>{event.level}</span>&nbsp;
-            <span className={classes.text}>{event.text}</span>
+            <span className={classes.text}>{this.state.isMessageContained ? <CauseView message={event.text} cause={this.state.cause}/> : event.text}</span>
           </div>
         </div>
         
