@@ -93,7 +93,7 @@ class LogLineView extends React.PureComponent {
     super(props)
     this.state = this._getInitialState()
   }
-  
+
   componentDidMount() {
     const {event} = this.props;
     let i = Messages.length;
@@ -109,7 +109,8 @@ class LogLineView extends React.PureComponent {
     return {
       isMoreInfoOpen: false,
       isMessageContained: false,
-      cause: ""
+      cause: "",
+      isStreamOpen: false
     }
   }
 
@@ -120,12 +121,12 @@ class LogLineView extends React.PureComponent {
   render() {
     const { classes, className: classNameProp, event, isSelected = false, ...props } = this.props
     const { isMoreInfoOpen } = this.state
-    
+
     const hasMoreInfo = event.exception || event.objects.length > 0
-    
+
     return (
       <div className={clsx(classes.root, classNameProp)} {...props}>
-        
+
         <div className={clsx(classes.line, {
           [classes.selected]: isSelected,
           [classes.error]: event.level === 'ERROR',
@@ -149,13 +150,13 @@ class LogLineView extends React.PureComponent {
             <span className={classes.text}>{this.state.isMessageContained ? <CauseView message={event.text} cause={this.state.cause}/> : event.text}</span>
           </div>
         </div>
-        
+
         { isMoreInfoOpen &&
           <div className={clsx(classes.moreInfo)}>
             <ReactJson src={event} name={false} displayObjectSize={false} displayDataTypes={false} />
           </div>
         }
-        
+
       </div>
     )
   }

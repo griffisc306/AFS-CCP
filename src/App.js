@@ -19,6 +19,8 @@ import SnapshotListView from './SnapshotListView'
 import LogView from './LogView'
 import MetricsView from './MetricsView'
 
+import findExtras from './utils/findExtras'
+
 // import CCP_LOG from './agent-log' // uncomment this for debugging
 
 const styles = (theme) => ({
@@ -45,14 +47,14 @@ class App extends React.Component {
     this._handleOnDrop = this._handleOnDrop.bind(this)
     this._handleExpandLogView = this._handleExpandLogView.bind(this)
     this._dropzoneRef = createRef()
-    
+
     if (window.File && window.FileReader && window.FileList && window.Blob) {
       // Great success! All the File APIs are supported.
     } else {
       alert('The File APIs are not fully supported in this browser.')
     }
   }
-  
+
   _getInitialState() {
     return {
       isInitial: true,
@@ -64,11 +66,11 @@ class App extends React.Component {
       selectedSnapshots: [],
     }
   }
-  
+
   componentDidMount() {
     // this._onLoadLog(CCP_LOG) // uncomment this for debugging
   }
-  
+
   _onLoadLog(log) {
     this.setState({
       isInitial: false,
@@ -77,41 +79,58 @@ class App extends React.Component {
       selectedSnapshots: [],
     })
   }
-  
+
   selectLog(selectedLog) {
     this.setState({ selectedLog })
   }
-  
+
   selectSnapshots(selectedSnapshots) {
     this.setState({ selectedSnapshots })
   }
-  
+
   _handleOnDrop(files) {
-    const reader = new FileReader()
-    reader.onload = (e) => { this._onLoadLog(JSON.parse(e.target.result)) }
+    console.log(files);
+    const allowedTypes = [
+      "text/plain",
+      "application/json"
+    ];
+    if (!allowedTypes.includes(files[0].type)){
+      alert(`Error in processing ${files[0].name}: ${files[0].type} is not a supported file type.`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const rawLogEntries = JSON.parse(e.target.result)
+        let finalLogs = rawLogEntries.map((entry)=>(findExtras(entry)));
+        this._onLoadLog(finalLogs)
+      }
+      catch (error){
+        alert(`I failed to load the file ${files[0].name}: ${error}`)
+      }
+    }
     reader.onloadend = () => { this.setState({ isLoading: false }) }
-    
+
     this.setState({ isLoading: true, filename: files[0].name })
     reader.readAsText(files[0])
   }
-  
+
   _handleExpandLogView() {
     this.setState({ isExpanded: !this.state.isExpanded })
   }
-  
+
   render() {
     const { isInitial, isLoading, isExpanded, filename, log, selectedLog, selectedSnapshots } = this.state
     const { classes } = this.props
     console.log(this.state)
-    
+
     return (
       <div className={classes.root}>
         <Dropzone
           ref={this._dropzoneRef}
           disableClick
           noClick={true}
-          onDrop={this._handleOnDrop}
-          accept="text/plain">
+          onDrop={this._handleOnDrop}>
             {({getRootProps, isDragActive}) => (
               <div {...getRootProps()}>
                 <AppBar position="static" className={classes.appbar}>
@@ -124,10 +143,10 @@ class App extends React.Component {
                     </Typography>
                   </Toolbar>
                 </AppBar>
-                
+
                 { (isDragActive) && <DraggingView /> }
-                
-                { 
+
+                {
                   (isInitial && !isLoading) ? <EmptyView /> :
                   (isLoading) ? <LoadingView /> :
                   <Container className={classes.content}>
@@ -140,12 +159,12 @@ class App extends React.Component {
                       <Grid item xs={12} md={3} style={isExpanded ? {display: 'none'} : {}}>
                         <SnapshotListView
                           log={log}
-                          selected={selectedSnapshots} 
-                          selectLog={this.selectLog} 
+                          selected={selectedSnapshots}
+                          selectLog={this.selectLog}
                           selectSnapshots={this.selectSnapshots} />
                       </Grid>
                       <Grid item xs={12} md={9} style={isExpanded ? {minWidth: '100%', maxWidth: '100%'} : {}}>
-                        <LogView log={log} 
+                        <LogView log={log}
                           selected={selectedLog}
                           isExpanded={isExpanded}
                           expand={this._handleExpandLogView} />
