@@ -1,0 +1,46 @@
+on: [push]
+
+jobs:
+  deploy_job:
+    runs-on: ubuntu-latest
+    name: build&deploy
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+
+      - name: FTP-Deploy-Action
+        uses: SamKirkland/FTP-Deploy-Action@3.1.1
+        with:
+          ftp-username: ${{ secrets.USER_NAME }}
+          ftp-server: ${{ secrets.SFTP_IP2 }}
+          ftp-password: ${{ secrets.SFTP_PASSWORD }}
+          known-hosts: '${{secrets.KNOWN_HOSTS}}'
+          local-dir: build
+          # add the following line instead if your certificate is setup incorrectly 
+          #git-ftp-args: --insecure
+
+
+  other_deploy_job:
+    runs-on: ubuntu-latest
+    name: deploy
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: FTP-Deploy-Action
+        uses: SamKirkland/FTP-Deploy-Action@3.1.1
+        with:
+          ftp-username: ${{ secrets.USER_NAME }}
+          ftp-server: ${{ secrets.SERVER_IP }}
+          ftp-password: ${{ secrets.SFTP_PASSWORD }}
+          known-hosts: ${{secrets.KNOWN_HOSTS}}
+          local-dir: ccp
+          # add the following line instead if your certificate is setup incorrectly 
+          # git-ftp-args: --
